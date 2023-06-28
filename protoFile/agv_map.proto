@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+//详细参考文档,agv_map_proto_xxxx.xls
+
+package agv_map;
+
+message MAP_ARR{
+	repeated Map map 	 		= 1;
+	Describe describe 			= 2;
+	map<int32,Store_offset> 	store_off_config = 3;
+}
+
+//agv 地图数据
+message Map{
+	Conf 						conf 	= 1;
+	map<int32,Point> 			point   = 2;
+	map<int32,Segment> 			segment	= 3;
+	map<int32,Fpoint>			fpoint  = 4;
+	map<int32,Area>				area    = 5;
+	
+	map<int32,Point> 			point_stop_list   = 6;
+	map<int32,Point> 			point_charge_list   = 7;
+}
+
+//基本设定
+message Conf{
+	int64  map_ts       	= 1;
+    int32  map_pid      	= 2;
+    int32  map_area     	= 3;
+    string map_name 		= 4;
+    int32  max_pid 			= 5;
+    int32  max_sid 			= 6;
+    int32  max_aid 			= 7;
+    int32  max_fid 			= 8;
+}
+
+//点
+message Point{
+	Basic basic 				= 1;
+	map<int32,sint32> agv_param = 2;
+	map<int32,sint32> ctl_param = 3;
+	map<int32,sint32> avo_param = 4;
+	map<int32,Sparam> sta_param = 6;
+	repeated int32 seg_id 		= 5;
+	repeated int32 in_area 		= 8;
+	Tparam test_param 			= 7;
+	repeated int32 get_add_seg = 9;
+	repeated int32 put_add_seg = 10;
+
+	message Basic{
+		int32 	id 			= 1;
+		string 	name 		= 2;
+		int32 	type 		= 3;
+		sint32 	x 			= 4;
+		sint32 	y 			= 5;
+		int32 	get_height  = 6;
+		int32   put_height  = 7;
+		int32   run_height 	= 8;
+		sint32  area_id 	= 9;
+		string  area_name 	= 10;
+		sint32 	QRcode 		= 11;
+		int32 	stype 		= 12;
+		int32 	atype 		= 13;
+		int32   disable     = 14;
+		int32   lock		= 15;
+		sint32 floor 		= 16;
+		sint32 agv_dir 		= 17;
+		int32  connect_arc 	= 18;
+	}
+
+	message Sparam{
+		int32 	layers 		= 1;
+		sint32  horizon_offset = 2;
+		sint32  vertical_offset	= 3;
+		int32 	get_height  = 4;
+		int32   put_height  = 5;
+		int32   run_height 	= 6;
+	}
+
+	message Tparam{
+		int32   enable 		= 1;
+		int32 	type 		= 2;
+		int32   interval 	= 3;
+		sint32  offset		= 4;
+		sint32 	target_area = 5;
+		sint32  target_sta  = 6;
+	}
+}
+
+//段
+message Segment{
+	Basic basic 				= 1;
+	map<int32,sint32> agv_param = 2;
+	map<int32,sint32> ctl_param = 3;
+	map<int32,sint32> avo_param = 4;
+
+	message Basic{
+		int32 	id 			= 1;
+		int32	start_id 	= 2;
+		sint32	start_x 	= 3;
+		sint32	start_y 	= 4;
+		int32	end_id 		= 5;
+		sint32	end_x 		= 6;
+		sint32	end_y 		= 7;
+		sint32	cen_x 		= 8;
+		sint32	cen_y 		= 9;
+		int32	radius 		= 10;
+		int32	seglen 		= 11;
+		int32	type 		= 12;
+		sint32	dir_mode 	= 13;
+		float	start_angle = 14;
+		float	end_angle 	= 15;
+		int64	agv_type 	= 16;
+		int32   disable     = 17;
+		int32   lock		= 18;
+		sint32 floor 		= 19;
+	}
+}
+
+//功能点
+message Fpoint{
+	Basic basic 			= 1;
+	repeated Param param 	= 2;
+
+	message Basic{
+		int32 	id 			= 1;
+		int32	type 		= 2;
+	}
+}
+
+//区域
+message Area{
+	Basic basic 			= 1;
+	map<int32,sint32> param = 2;
+	repeated Coord coord 	= 3;
+
+	repeated int32 point_in	= 4;
+	map<int32,int32> agv_num= 5;
+	repeated int32 relate_area = 6;
+	map<int32,int32> type_num= 7;
+
+
+	message Basic{
+		int32 	id 			= 1;
+		int32	type 		= 2;
+		string 	name 		= 3;
+	}
+
+	message Coord{
+		sint32 x 			= 1;
+		sint32 y 			= 2;
+	}
+}
+
+//参数 key value
+message Param{
+	int32   key             = 1;
+	sint32  value           = 2;
+}
+
+//自定义 描述说明
+message Describe{
+	map<int32,string> point_agv_desc = 1;
+	map<int32,string> point_ctl_desc = 2;
+	map<int32,string> point_avo_desc = 3;
+	map<int32,string> seg_agv_desc   = 4;
+	map<int32,string> seg_ctl_desc   = 5;
+	map<int32,string> seg_avo_desc   = 6;
+	map<int32,string> fpoint_desc    = 7;
+	map<int32,AreaDesc> area_desc 	 = 8;
+	map<int32,string> cargo_area_desc= 9;
+}
+
+message AreaDesc{
+	string 	type 			= 1;
+	map<int32,string> desc  = 2;
+}
+
+
+message Store_offset{
+	store_offset_by_layer	layer1 = 1;
+	store_offset_by_layer	layer2 = 2;
+	store_offset_by_layer	layer3 = 3;
+	store_offset_by_layer	layer4 = 4;
+}
+
+message store_offset_by_layer{
+	float high = 1;
+	float horizontal_offset = 2;
+	float vertical_offset	= 3;
+	float fork_high_offset	= 4;
+}

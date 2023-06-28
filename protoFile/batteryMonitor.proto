@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package batteryMonitor;
+
+//客户端请求
+message BatteryData {
+  enum InfoType {
+	PROFILE = 0;	//电池概要数据
+	DETAIL = 1;		//电池详细数据
+	REMIND = 2;		//充电站数据
+  }
+  
+  InfoType info = 1;	//连接默认发送PROFILE
+  int32 stationID = 2;	//换电站ID
+  int32 btyTag = 3;		//电池ID号
+  int32 agvID = 4;		//AGV ID
+}
+
+
+//服务器返回
+//1、概览信息
+message ProfileBtyData {
+  message BatData {
+	int32 bty_Tag = 1;
+	string bty_Rfid = 2;
+	int32 inAGV = 3;
+	int32 inStation = 4;
+	int32 stationSpace = 5;
+	int32 power = 6;
+	int32 useAvgTime = 7;		//平均使用时长，单位min
+	int32 chargeAvgTime = 8;	//平均充电时长，单位min
+	int32 idleAvgTime = 9;		//平均闲置时长，单位min
+	int32 addWaterInter = 10;	//平均加水间隔，单位D
+	string addWaterTime = 11;	//上次加水时间
+	string startUseTime = 12;	//启用时间
+  }
+  
+  repeated BatData bats = 1;
+}
+
+//2、详细信息
+message DetailBtyData {
+  message EvtItem {
+	int32 bty_Tag = 1;			//电池标签
+	string bty_Rfid = 2;		//电池RFID
+	string evtItem = 3;			//事件项
+	int32 AGV = 4;				//相关AGV
+	string startTime = 5;		//事件开始时间
+	string endTime = 6;			//事件结束时间
+	string interTime = 7;		//间隔时间
+  }
+
+  repeated EvtItem items = 1;
+}

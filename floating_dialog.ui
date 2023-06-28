@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Floating_Dialog</class>
+ <widget class="QDialog" name="Floating_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>109</width>
+    <height>252</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QTableWidget" name="float_tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>109</width>
+     <height>252</height>
+    </rect>
+   </property>
+   <attribute name="horizontalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>60</number>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>25</number>
+   </attribute>
+   <attribute name="verticalHeaderDefaultSectionSize">
+    <number>25</number>
+   </attribute>
+   <row>
+    <property name="text">
+     <string>车号</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>类型(A)</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>任务ID</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>类型(T)</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>速度</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>主状态</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>子状态</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>报警</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>电量</string>
+    </property>
+   </row>
+   <row>
+    <property name="text">
+     <string>时间</string>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="1" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="2" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="3" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="4" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="5" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="6" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="7" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="8" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+   <item row="9" column="0">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

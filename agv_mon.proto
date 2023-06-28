@@ -1,0 +1,252 @@
+syntax = "proto3";
+
+//详细参考文档,agv_mon_proto_xxxx.xls
+
+package agv_mon;
+
+//agv 监控心跳数据
+message Mon_Ask{
+	int32  data             = 1;
+	int32  area             = 2;
+	int32  type             = 3;
+}
+
+//agv 监控数据
+message Mon_Data{
+	repeated AgvInfor agvinfor = 1;
+}
+
+//AGV 信息
+message AgvInfor{
+	uint32  ip              = 1;
+	int64   ts              = 2;
+	int32   ol              = 3;
+
+	AgvReport agvreport     = 4;
+	AvoidInfo avoidinfo     = 5;
+	TimeInfo  timeinfo      = 6;
+	repeated int32 route_id = 7;
+	repeated RoutePoint routepoint = 8;
+
+	message AgvReport{
+		Basic   basic       = 1;
+		AgvTask agvtask     = 2;
+		AgvLoc  agvloc      = 3;
+		AgvSt   agvst       = 4;
+		AgvBat  agvbat      = 5;
+		AgvLoad agvload     = 6;
+		repeated Param protection = 7;
+		repeated Param dev_status = 8;
+		//安全防护
+		enum ProtectionType{
+			SAFE_FRONT      = 0;
+			SAFE_BACK       = 1;
+			INFR_BACK       = 2;
+		}
+
+		//设备信号
+		enum DeviceType{
+			BAT_LOCK        = 0;
+		}
+	}
+
+	message Basic{
+		int64  ts           = 1; //地图时间戳
+		int32  pid          = 2; //项目id
+		int32  area         = 3; //地图区域
+		int32  id           = 4; //设备id
+		int32  type         = 5; //设备类型
+        string version      = 6;
+        int32  version_ts   = 7;
+        int32  beta         = 8;
+	}
+
+	message AgvTask{
+		int32  task_id      = 1;
+		int32  task_type    = 2;
+		sint32 start_id     = 3;
+		sint32 end_id       = 4;
+		sint32 detour_id    = 5; //绕行点 route_data
+		sint32 nxt_sta      = 6;
+		sint32 cur_seg      = 7;
+		sint32 nxt_seg      = 8;
+		sint32 start_layer  = 9;
+		sint32 end_layer    = 10;
+		
+	}
+
+	message AgvLoc{
+		COORD  pos          = 1;
+		COORD  nav          = 2;
+		float  pos_ang      = 3;
+		sint32  cur_sta     = 4;
+		sint32  see_reflect = 5;
+		sint32  use_reflect = 6;
+        repeated int32 reflect_id = 7;
+        int32  in_lift      = 8;
+        int32  floor        = 9;
+	}
+
+	message AgvSt{
+		sint32 dir          = 1;
+		int32  speed        = 2;
+		int32  state        = 3;
+		int32  status       = 4;
+		sint32 softstop     = 5;
+		sint32 error        = 6;
+		sint32 speedlimit   = 7;
+	}
+
+	message AgvBat{
+		float  battery      = 1;
+		sint32 chargingtime = 2;
+	}
+
+	message AgvLoad{
+		sint32 load         = 1;
+		int32  hyd_height   = 2;
+	}
+
+	message AvoidInfo{
+		//新避让
+		repeated COORD agvoutline     = 1;
+		repeated COORD goodsoutline   = 2;
+		repeated int32 occupypoint    = 3;
+		repeated int32 scanpoint      = 4;
+
+		sint32 stopStatus    	= 5;          //避让状态
+		sint32 stopLevel     	= 6;          //避让级别
+		sint32 stopByAGVId   	= 7;          //避让AGV
+		sint32 stopReason    	= 8;          //避让原因
+		sint32 speedLevel    	= 9;          //限速级别
+		sint32 speedByAGVId  	= 10;         //导致限速AGV
+		sint32 speedReason   	= 11;         //限速原因
+		sint32 outLineType   	= 12;
+		sint32 confPoint 		= 13;		  //避让冲突点
+
+	}
+
+	//时间数据
+	message TimeInfo{
+		int32 idle_wait_ts      = 1;         //agv无任务等待时间毫秒
+		int32 avoid_set_ts      = 2;         //避让设置时间戳
+		int32 manual_on_ts      = 3;         //手动持续时间
+		int32 softstop_on_ts    = 4;         //软停持续时间
+		int32 warning_on_ts     = 5;         //报警持续时间
+	}
+
+	message COORD{
+		sint32 x            	= 1;
+		sint32 y            	= 2;
+	}
+}
+
+
+//agv 路径数据
+message Mon_Route{
+	repeated AgvRoute agvroute = 1;
+	message AgvRoute{
+		int32  id           = 1; //设备id
+		repeated int32 route_id = 2; 		//片段列表
+		repeated RoutePoint routepoint = 3; //有功能点的点列表
+		sint32 cur_seg 		= 4;
+		sint32 nxt_seg 		= 5;
+	}
+}
+
+message RoutePoint{
+	int32  point            = 1; 			//站点id
+	int32  fpoint           = 2; 			//功能点id
+}
+
+//所有任务 数据
+message Task_Data{
+	repeated TaskInfo taskinfo = 1;
+}
+
+//单任务数据
+message TaskInfo{
+	int32   wms_id          = 1;
+	int32   mes_id          = 2;
+	sint32  agv_id          = 3;
+	int32   area            = 4;
+	int32   status          = 5;
+	TaskLoc start           = 6;
+	TaskLoc end             = 7;
+	string  pallet_no       = 8;
+	int64   create_time     = 9;
+	int64   excute_time     = 10;
+	int64   get_time        = 11;
+	int64   finish_time     = 12;
+	int32   priority        = 13;
+	sint32  agv_expect      = 14;
+	int32   delay_type      = 15;
+}
+
+//所有 设备数据
+message Dev_Data{
+	repeated CxjData cxjdata = 1;
+	repeated CxjBack cxjback = 2;
+	repeated WmsData wmsdata = 3;
+}
+
+message CxjData{
+	int32   cxjid          	= 1;
+	int32   cxjtype         = 2;
+	int32   storeid         = 3;
+	int32   goods_sig 		= 4;
+	int32  	inright_sig     = 5;
+	int32  	all_sig 		= 6;
+	int32  	agv_in_flag     = 7;
+	int32  	cxj_heart 	    = 8;
+	sint32  agv_id 	 		= 9;
+	int32  	wms_task        = 10;
+}
+
+message CxjBack{
+	int32   storeid         = 1;
+	sint32  area         	= 2;
+	int32   type         	= 3;
+	int32   task_no        	= 4;
+	string  rfid 		    = 5;
+	uint32 	plcip 	 		= 6;
+	int64  	ts 			    = 7;
+}
+
+message WmsData{
+    int32   storeid_pick    = 1;
+    int32   storeid_put     = 2;
+	sint32  area         	= 3;
+	int32   type         	= 4;
+	sint32  pick_enable 	= 5;
+	sint32  put_enable 		= 6;
+	sint32  pick_task_no 	= 7;
+	sint32  put_task_no  	= 8;
+	repeated Param infr 	= 9;
+	int64  	ts 			    = 10;
+}
+
+message Param{
+	int32   key             = 1;
+	sint32  value           = 2;
+}
+
+message TaskLoc{
+	string  name            = 1;
+	int32   layers          = 2;
+	int32   id              = 3;
+	sint32  area 			= 4;
+}
+
+//发送指令
+message COMD{
+    int32 flag = 1;
+    repeated int32 value = 2;
+	
+}
+
+
+//接收指令返回
+message COMDRET{
+	repeated string comdret = 1;
+}
