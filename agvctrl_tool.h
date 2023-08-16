@@ -15,7 +15,7 @@ class AgvCtrl_Tool;
 #pragma pack(push, 1)
 typedef struct
 {
-    char LOGO1;
+    char LOGO1;//暂时修改测试
     char LOGO2;
     char LOGO3;
     char LOGO4;
