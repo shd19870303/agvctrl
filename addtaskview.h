@@ -29,7 +29,7 @@ private slots:
 
     void on_pushBtn_del_clicked();
 
-    void on_pushButton_open_clicked();
+    void on_pushButton_open_clicked();  //新修改1
 
     void on_pushButton_save_clicked();
 
